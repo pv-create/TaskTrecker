@@ -1,5 +1,63 @@
-<h3>TaskTable</h3>
+@inject TodoList.Data.Repository.TaskRepository repository;
+@using TodoList.Pages.Components
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Start</th>
+        <th scope="col">Finish</th>
+        <th scope="col">Delete</th>
+        <th scope="col">Update</th>
+    </tr>
+    <tr>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    @foreach (var item in TaskList)
+    {
+        <tbody>
+        <tr>
+                            
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Description
+            </td>
+            <td>
+                @item.Start.ToString("yy-MM-dd")
+            </td>
+            <td>
+                @item.Finish.ToString("yy-MM-dd")
+            </td>
+            <td>
+                <button @onclick="(()=>DeleteRask(item))"  type="button" class="btn btn-danger">Delete</button>
+            </td>
+            <td>
+                <a href="/UpdateTask/@item.Id.ToString()" class="btn btn-info" role="button">Update </a>
+            </td>
+        </tr>
+        </tbody>
+    }
+    
+</table>
 
 @code {
-    
+    private List<TodoIthem> TaskList = new List<TodoIthem>();
+    private bool ShowModal = false;
+
+    protected override void OnInitialized()
+    {
+        TaskList = repository.Get().ToList();
+    }
+
+    private void DeleteRask(TodoIthem ithem)
+    {
+        repository.Remove(ithem);
+        TaskList.Remove(ithem);
+    }
+
+   
+
 }

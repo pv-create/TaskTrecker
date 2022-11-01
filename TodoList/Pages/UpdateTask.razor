@@ -1,6 +1,66 @@
-@page "/UpdateTask"
-<h3>UpdateTask</h3>
+@inject TodoList.Data.Repository.TaskRepository repository;
+@using TodoList.Pages.Components
+@inject TodoList.Data.Repository.StatusRepository StatusRepo;
+
+@page "/UpdateTask/{Id}"
+
+<div  class="d-flex justify-content-center">
+    <form>
+      <div class="mb-2">
+        <label for="exampleInputEmail1" class="form-label">Имя задачи</label>
+        <input @bind="UpdatedTodo.Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      </div>
+      <div class="mb-2">
+        <label for="exampleInputPassword1" class="form-label">Описание задачи</label>
+        <input @bind="UpdatedTodo.Description"  class="form-control" id="exampleInputPassword1">
+      </div>
+      @* <div class="mb-2 form-check"> *@
+      @*    <input @bind="UpdatedTodo.Start" *@
+      @*            type="text" *@
+      @*            class="datepicker_input form-control border-2" *@
+      @*            id="datepicker1" *@
+      @*            required *@
+      @*            placeholder="DD/MM/YYYY"> *@
+      @*   <label class="form-check-label" for="exampleCheck1">Дата начала</label> *@
+      @* </div> *@
+        <div class="mb-2 form-check">
+             <input @bind="UpdatedTodo.Finish"
+                     type="text"
+                     class="datepicker_input form-control border-2"
+                     id="datepicker1"
+                     required
+                     placeholder="DD/MM/YYYY">
+            <label class="form-check-label" for="exampleCheck1">Дата завершения</label>
+        </div>
+        <div>
+            <select @bind="UpdatedTodo.StatusId" class="form-select" aria-label="Default select example">
+               @foreach (var item in StatusList)
+               {
+                   <option value="@item.Id">@item.Name</option>
+               }
+            </select>
+        </div>
+        
+      <button @onclick="(()=>UpdateTodo())" class="btn btn-primary">Update</button>
+    </form>
+
+</div>
 
 @code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    private TodoIthem UpdatedTodo;
     
+    private IEnumerable<Status> StatusList = new List<Status>();
+    
+    protected override void OnInitialized()
+    {
+        UpdatedTodo = repository.FindById(Convert.ToInt32(Id));
+        StatusList = StatusRepo.Get();
+    }
+    public void UpdateTodo()
+    {
+        repository.Update(UpdatedTodo);
+    }
 }

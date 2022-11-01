@@ -1,5 +1,78 @@
-<h3>AddTask</h3>
+@using Microsoft.CodeAnalysis.VisualBasic.Syntax
+@using Microsoft.AspNetCore.Razor.Language
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@inject TodoList.Data.Repository.TaskRepository repository;
+@inject TodoList.Data.Repository.StatusRepository StatusRepo;
+@inject IJSRuntime JsRuntime
+<div class="d-flex justify-content-center">
+    
+    <EditForm Model="@newIthem" OnValidSubmit="@AddTodo"  OnInvalidSubmit="@ErrorSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="mb-2">
+            <label for="exampleInputEmail1" class="form-label">Имя задачи</label>
+            <InputText  @bind-Value="newIthem.Name" class="form-control"/>
+        </div>
+        
+        <div class="mb-2">
+            <label for="exampleInputPassword1" class="form-label">Описание задачи</label>
+            <InputText @bind-Value="newIthem.Description" class="form-control"/>
+        </div>
+        
+        <div class="mb-2">
+            <label class="form-check-label" for="exampleCheck1">Дата начала</label>
+            <InputDate  @bind-Value="newIthem.Start"/>
+        </div>
+        
+        <div class="mb-2">
+            <label class="form-check-label" for="exampleCheck1">Дата начала</label>
+            <InputDate  @bind-Value="newIthem.Finish"/>
+        </div>
+        
+        <div>
+            <select @bind="newIthem.StatusId" class="form-select" aria-label="Default select example">
+                @foreach (var item in StatusList)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </EditForm>
+    <div class="alert alert-primary @HideAlert" role="alert" >
+        @AlertContent
+    </div>
+    
+</div>
 
 @code {
+    private TodoIthem newIthem = new TodoIthem();
+    private IEnumerable<Status> StatusList = new List<Status>();
     
+
+    private string HideAlert {get; set;} = "d-none";
+    private string AlertContent { get; set; } = "This is a primary alert—check it out!";
+    
+    
+    protected override void   OnInitialized()
+    {
+        StatusList = StatusRepo.Get();
+    }
+
+    public  void ErrorSubmit()
+    {
+        Console.WriteLine("error");
+    }
+
+    public void ValidSubmit()
+    {
+        Console.WriteLine("nice");
+    }
+
+    public void AddTodo()
+    {
+        
+        repository.Create(newIthem);
+        //newIthem = null;
+    }
 }

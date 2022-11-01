@@ -17,27 +17,33 @@ namespace TodoList.Data.Repository
             _context = context;
         }
 
-        public TodoIthem FindById(Guid id)
+        public TodoIthem FindById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Tasks.Where(all => all.Id == id).FirstOrDefault();
         }
 
         public void Create(TodoIthem item)
         {
-            _context.Add(item);
-            _context.SaveChanges();
+            try
+            {
+                _context.Add(item);
+                _context.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
         
         
         
 
-        public async Task FindByIdasynk(int id) => _context.Tasks.Where(all => all.Id == id).FirstOrDefaultAsync();
-       
+       // public TodoIthem FindById(int id) => _context.Tasks.Where(all => all.Id == id).FirstOrDefault();
 
-        public IEnumerable<TodoIthem> Get()
-        {
-            throw new NotImplementedException();
-        }
+
+        public IEnumerable<TodoIthem> Get() => _context.Tasks.ToList();
+        
 
         public IEnumerable<TodoIthem> Get(Func<TodoIthem, bool> predicate)
         {
@@ -46,12 +52,14 @@ namespace TodoList.Data.Repository
 
         public void Remove(TodoIthem item)
         {
-            throw new NotImplementedException();
+            _context.Tasks.Remove(item);
+            _context.SaveChanges();
         }
 
         public void Update(TodoIthem item)
         {
-            throw new NotImplementedException();
+            _context.Tasks.Update(item);
+            _context.SaveChanges();
         }
     }
 }
