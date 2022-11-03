@@ -14,15 +14,6 @@
         <label for="exampleInputPassword1" class="form-label">Описание задачи</label>
         <input @bind="UpdatedTodo.Description"  class="form-control" id="exampleInputPassword1">
       </div>
-      @* <div class="mb-2 form-check"> *@
-      @*    <input @bind="UpdatedTodo.Start" *@
-      @*            type="text" *@
-      @*            class="datepicker_input form-control border-2" *@
-      @*            id="datepicker1" *@
-      @*            required *@
-      @*            placeholder="DD/MM/YYYY"> *@
-      @*   <label class="form-check-label" for="exampleCheck1">Дата начала</label> *@
-      @* </div> *@
         <div class="mb-2 form-check">
              <input @bind="UpdatedTodo.Finish"
                      type="text"
@@ -57,7 +48,7 @@
     protected override void OnInitialized()
     {
         UpdatedTodo = repository.FindById(Convert.ToInt32(Id));
-        StatusList = StatusRepo.Get();
+        StatusList = StatusRepo.GetAvailableStatuses(UpdatedTodo);
     }
     public void UpdateTodo()
     {

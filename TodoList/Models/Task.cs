@@ -22,6 +22,7 @@ namespace TodoList.Models
         
         
         [ForeignKey("Status")]
+        [Required]
         public int StatusId { get; set; }
     }
 }

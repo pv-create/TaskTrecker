@@ -26,6 +26,7 @@ namespace TodoList.Data.Repository
         {
             try
             {
+                item.StatusId = 1;
                 _context.Add(item);
                 _context.SaveChanges();
             }
