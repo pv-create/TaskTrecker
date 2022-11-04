@@ -1,0 +1,62 @@
+@inject TodoList.Data.Repository.AdminRepository repository;
+@page "/AdminPage"
+@using Microsoft.AspNetCore.Identity
+<h3>AdminPage</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Confirm</th>
+        <th scope="col">Delete</th>
+        <th scope="col">Update</th>
+    </tr>
+    <tr>
+       
+    </tr>
+    </thead>
+    @foreach (var item in UserList)
+        {
+            <tbody>
+            <tr>
+                                
+                <td>
+                    @item.NormalizedUserName
+                </td>
+                <td>
+                    @item.NormalizedEmail
+                </td>
+                <td>
+                    @item.PhoneNumber
+                </td>
+                <td>
+                    @item.EmailConfirmed
+                </td>
+                <td>
+                    <button @onclick="(()=>DeleteUser())"  type="button" class="btn btn-danger">Delete</button>
+                </td>
+                <td>
+                    <a href="/UpdateTask/@item.Id.ToString()" class="btn btn-info" role="button">Update </a>
+                </td>
+            </tr>
+            </tbody>
+        }
+
+</table>
+
+@code {
+    private List<IdentityUser> UserList = new List<IdentityUser>();
+    
+
+    protected override void OnInitialized()
+    {
+        UserList = repository.Get().ToList();
+    }
+
+    private void DeleteUser()
+    {
+        
+    }
+    
+}

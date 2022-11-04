@@ -1,4 +1,4 @@
-﻿global using TodoList.Models;
+global using TodoList.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -24,6 +24,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddScoped<TaskRepository>();
 builder.Services.AddScoped<StatusRepository>();
+builder.Services.AddScoped<AdminRepository>();
 
 
 var app = builder.Build();
@@ -37,13 +38,15 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
+
+
 
 app.UseRouting();
 
